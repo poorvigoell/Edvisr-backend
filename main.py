@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
 import traceback
+from fastapi.middleware.cors import CORSMiddleware
 
 # Load env vars
 load_dotenv()
@@ -12,6 +13,14 @@ from quiz import generate_questions
 from whatif import generate_what_if_question
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://edvisr.netlify.app/"],  # 👈 Allow all origins (frontend domains)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Input models
 class QuizInput(BaseModel):
