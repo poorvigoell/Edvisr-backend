@@ -18,6 +18,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://edvisr.netlify.app",
                    "http://localhost:3000",
+                   "https://edvisrnew.vercel.app",
                    "https://edvisr-seven.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
