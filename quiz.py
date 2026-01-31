@@ -1,43 +1,33 @@
 import os
-import google.generativeai as genai
+from google import genai
 
-# Fetch API key from environment variables
-api_key = os.getenv("GOOGLE_API_KEY")
-if not api_key:
-    raise ValueError("GOOGLE_API_KEY is not set. Run the command to set it in Colab first.")
-
-genai.configure(api_key=api_key)
+# Create client using API key
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def generate_questions(grade, topic, difficulty):
     """
-    Generates MCQ and theory questions based on the specified topic, grade, and difficulty level.
+    Generates MCQ and theory questions based on the specified topic,
+    grade, and difficulty level.
     """
-    model = genai.GenerativeModel('gemini-1.5-pro')
 
     prompt = f"""
-    Generate multiple-choice questions (MCQs) and theory questions for NCERT Class {grade} on the topic "{topic}".
-    Ensure the questions match the {difficulty} difficulty level.
-    Analyze past year questions (PYQs) to maintain relevance and standard difficulty.
-    Provide the correct answers for MCQs.
+    Generate multiple-choice questions (MCQs) and theory questions for NCERT Class {grade}
+    on the topic "{topic}".
 
-    **Multiple Choice Questions (MCQs) - {difficulty.capitalize()} Level:**
+    Difficulty level: {difficulty}
 
-    1. Question 1
-       a) Option a
-       b) Option b
-       c) Option c
-       d) Option d
-       Answer: [Correct answer]
+    Instructions:
+    - Generate 5 MCQs with 4 options each
+    - Clearly mention the correct answer
+    - Then generate 3 theory questions
+    - Keep NCERT / PYQ relevance
 
-    2. Question 2
-       ...
-
-    **Theory Questions - {difficulty.capitalize()} Level:**
-
-    1. Question 1
-    2. Question 2
-    ...
+    Format the response clearly.
     """
 
-    response = model.generate_content(prompt)
-    return response.text if response else "No response from API."
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+    )
+
+    return response.text

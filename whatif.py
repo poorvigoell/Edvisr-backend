@@ -1,28 +1,34 @@
 import os
-import google.generativeai as genai
+from google import genai
 
-# Load API key from environment
-api_key = os.getenv("GOOGLE_API_KEY")
-if not api_key:
-    raise ValueError("GOOGLE_API_KEY is not set in the environment.")
+# Create Gemini client using API key
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
-genai.configure(api_key=api_key)
+def generate_what_if_question(topic: str) -> str:
+    """
+    Generates one creative "What If?" question based on the given topic.
+    """
 
-def generate_what_if_question(topic):
-    model = genai.GenerativeModel('gemini-1.5-pro')
+    prompt = f"""
+    Generate one creative "What If?" question based on the topic "{topic}".
 
-    prompt = f"""Generate one creative "What If?" question based on the topic "{topic}".
-    The question should challenge students to think about an alternate reality where something did not happen or happened differently.
-    Just return a single engaging question. No explanation needed."""
+    The question should:
+    - Explore an alternate reality where something important changed
+    - Encourage critical and imaginative thinking
+    - Be suitable for students
 
-    response = model.generate_content(
-        prompt,
-        generation_config=genai.GenerationConfig(
-            temperature=1,
-            top_p=0.95,
-            top_k=40,
-            max_output_tokens=200
-        )
+    Return ONLY one engaging question.
+    """
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config={
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 40,
+            "max_output_tokens": 200,
+        },
     )
 
-    return response.text if response else "No response from Gemini"
+    return response.text
