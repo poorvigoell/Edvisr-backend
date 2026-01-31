@@ -17,7 +17,8 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://edvisr.netlify.app",
-                   "http://localhost:3000"],  # 👈 Allow all origins (frontend domains)
+                   "http://localhost:3000",
+                   "https://edvisr-seven.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
