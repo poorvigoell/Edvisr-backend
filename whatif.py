@@ -10,14 +10,18 @@ def generate_what_if_question(topic: str) -> str:
     """
 
     prompt = f"""
-    Generate one creative "What If?" question based on the topic "{topic}".
+        You are an expert educator and question designer.
 
-    The question should:
-    - Explore an alternate reality where something important changed
-    - Encourage critical and imaginative thinking
-    - Be suitable for students
+        Create ONE thought-provoking “What if?” question based on the topic: "{topic}".
 
-    Return ONLY one engaging question.
+        Rules:
+        - The question must explore a realistic alternate scenario where a key event, concept, or assumption changes
+        - It should encourage critical, causal, or imaginative thinking
+        - It must be age-appropriate and suitable for students
+        - Do NOT include explanations, answers, or extra text
+
+        Output format:
+        - A single sentence phrased as a question
     """
 
     response = client.models.generate_content(
